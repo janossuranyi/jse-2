@@ -19,6 +19,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Core
 file(GLOB CORE_SOURCE  jse/core/*.cpp)
 file(GLOB CORE_INCLUDE jse/core/*.hpp)
+# Sys
+file(GLOB SYS_SOURCE  jse/core/sys/*.cpp)
+file(GLOB SYS_INCLUDE jse/core/sys/*.hpp)
+# IO
+file(GLOB IO_SOURCE  jse/core/io/*.cpp)
+file(GLOB IO_INCLUDE jse/core/io/*.hpp)
+# Math
+file(GLOB MATH_SOURCE  jse/core/math/*.cpp)
+file(GLOB MATH_INCLUDE jse/core/math/*.hpp)
+
 # Graphics
 file(GLOB GRAPHICS_SOURCE  jse/graphics/*.cpp)
 file(GLOB GRAPHICS_INCLUDE jse/graphics/*.hpp)
@@ -29,9 +39,6 @@ file(GLOB SCENE_INCLUDE jse/scene/*.hpp)
 file(GLOB INPUT_SOURCE  jse/input/*.cpp)
 file(GLOB INPUT_INCLUDE jse/input/*.hpp)
 
-# Math
-file(GLOB MATH_SOURCE  jse/core/math/*.cpp)
-file(GLOB MATH_INCLUDE jse/core/math/*.hpp)
 
 file(GLOB SOIL2_INCLUDE external/soil2/incs/*.h)
 file(GLOB SOIL2_SOURCE external/soil2/srcs/*.c)
@@ -40,6 +47,10 @@ file(GLOB SOIL2_SOURCE external/soil2/srcs/*.c)
 add_library(engine STATIC 
   ${CORE_SOURCE}
   ${CORE_INCLUDE}
+  ${IO_SOURCE}
+  ${IO_INCLUDE}
+  ${SYS_SOURCE}
+  ${SYS_INCLUDE}
   ${INPUT_SOURCE}
   ${INPUT_INCLUDE}
   ${GRAPHICS_SOURCE}
@@ -123,7 +134,9 @@ if(WIN32)
 endif()
 
 source_group("Core" FILES ${CORE_SOURCE} ${CORE_INCLUDE})
+source_group("Core\\Math" FILES ${MATH_SOURCE} ${MATH_INCLUDE})
+source_group("Core\\Sys" FILES ${SYS_SOURCE} ${SYS_INCLUDE})
+source_group("Core\\Io" FILES ${IO_SOURCE} ${IO_INCLUDE})
 source_group("Graphics" FILES ${GRAPHICS_SOURCE} ${GRAPHICS_INCLUDE})
-source_group("Math" FILES ${MATH_SOURCE} ${MATH_INCLUDE})
 source_group("Scene" FILES ${SCENE_SOURCE} ${SCENE_INCLUDE})
 source_group("Input" FILES ${INPUT_SOURCE} ${INPUT_INCLUDE})
