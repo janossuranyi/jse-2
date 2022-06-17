@@ -4,8 +4,7 @@
 #include <string>
 #include <cstdio>
 
-namespace jse
-{
+namespace jse::core::io {
 
 	class LogWriter
 	{

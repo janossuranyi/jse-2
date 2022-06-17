@@ -82,6 +82,7 @@ add_library(tinygltf STATIC
 )
 
 include_directories(
+  ./
   jse/
   external/glew-2.1.0/include/
   external/glm/

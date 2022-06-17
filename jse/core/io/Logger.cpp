@@ -7,8 +7,7 @@
 #include "SDL.h"
 #include "core/io/Logger.hpp"
 
-namespace jse
-{
+namespace jse::core::io {
 	static LogWriter gLogWriter("jse.log");
 
 	void LogWriter::Write(const std::string& msg)
@@ -65,7 +64,7 @@ namespace jse
 		char text[100];
 
 		time_t now = time(NULL);
-		const tm *my_time = localtime(&now);
+		const tm* my_time = localtime(&now);
 		strftime(text, 100, "[%Y-%m-%d %H:%M:%S]", my_time);
 
 		return std::string(text);

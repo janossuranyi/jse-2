@@ -2,10 +2,10 @@
 #define JSE_FILESYSTEM_H
 
 #include <filesystem>
-
+#include <functional>
 #include "core/sys/Types.hpp"
 
-namespace jse {
+namespace jse::core::io {
 
 	class FileSystem
 	{
@@ -16,7 +16,9 @@ namespace jse {
 		String Resolve(const String&) const;
 		bool ReadTextFile(const String&, String&);
 		bool ReadTextFileBase(const String&, String&);
-		byte_vector ReadBinaryFile(const String& aFileName);
+		ByteVec ReadBinaryFile(const String& aFileName);
+		StrVec GetDirectoryEntries(const String& dirname, const char* filter = nullptr);
+		void GetDirectoryEntries(const String& dirname, const std::function<void(const String&)>& fn, const char* filter = nullptr);
 	private:
 		std::filesystem::path workingDir;
 	};

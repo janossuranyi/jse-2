@@ -5,13 +5,12 @@
 #include <vector>
 #include <cstdint>
 
-namespace jse {
+namespace jse::core {
 
 	using String = std::string;
-	using string = std::string;
-	using byte_vector = std::vector<uint8_t>;
-	using int_vector = std::vector<int>;
-	using string_vector = std::vector<String>;
+	using ByteVec = std::vector<uint8_t>;
+	using IntVec = std::vector<int>;
+	using StrVec = std::vector<String>;
 
 }
 #endif // !JSE_SYS_TYPES_H
