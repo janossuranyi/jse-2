@@ -8,6 +8,7 @@
 #define DRAWVERT_NORMAL_OFFSET (4*4)
 #define DRAWVERT_TANGENT_OFFSET (5*4)
 #define DRAWVERT_COLOR_OFFSET (6*4)
+#define DRAWVERT_COLOR2_OFFSET (7*4)
 
 #define SHADOWVERT_POSITION_OFFSET (0*4)
 #define SHADOWVERT_NORMAL_OFFSET (4*4)
@@ -26,7 +27,7 @@
 // in the comments which specifies a non-linear mapping with an exact
 // representation of -1, 0 and +1 but -1 is represented twice.
 #define NORMALMAP_BYTE_TO_FLOAT( x )	VERTEX_BYTE_TO_FLOAT( x )	//( (x) - 128.0f ) * ( 1.0f / 127.0f )
-#define NORMALMAP_FLOAT_TO_BYTE( x )	VERTEX_FLOAT_TO_BYTE( x )	//idMath::Ftob( 128.0f + 127.0f * (x) + 0.5f )
+#define NORMALMAP_FLOAT_TO_BYTE( x )	VERTEX_FLOAT_TO_BYTE( x )	//byte( 128.0f + 127.0f * (x) + 0.5f )
 
 // GPU half-float bit patterns
 #define HF_MANTISSA(x)	(x&1023)
