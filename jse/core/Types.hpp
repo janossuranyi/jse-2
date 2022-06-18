@@ -1,5 +1,5 @@
-#ifndef JSE_SYS_TYPES_H
-#define JSE_SYS_TYPES_H
+#ifndef JSE_TYPES_H
+#define JSE_TYPES_H
 
 #include <string>
 #include <vector>

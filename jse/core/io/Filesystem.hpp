@@ -3,7 +3,7 @@
 
 #include <filesystem>
 #include <functional>
-#include "core/sys/Types.hpp"
+#include "core/Types.hpp"
 
 namespace jse::core::io {
 

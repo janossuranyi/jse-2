@@ -23,7 +23,7 @@ namespace jse::core::math {
 	{
 		return glm::degrees(p);
 	}
-	quat createQuaternion(const float rX, const float rY, const float rZ)
+	inline quat createQuaternion(const float rX, const float rY, const float rZ)
 	{
 		quat qx = glm::angleAxis(glm::radians(rX), vec3(1.f, 0.f, 0.f));
 		quat qy = glm::angleAxis(glm::radians(rY), vec3(0.f, 1.f, 0.f));

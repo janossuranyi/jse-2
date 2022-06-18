@@ -32,12 +32,18 @@ file(GLOB MATH_INCLUDE jse/core/math/*.hpp)
 # Graphics
 file(GLOB GRAPHICS_SOURCE  jse/graphics/*.cpp)
 file(GLOB GRAPHICS_INCLUDE jse/graphics/*.hpp)
+# Graphics - OpenGL
+file(GLOB GRAPHICS_OGL_SOURCE  jse/graphics/OpenGL/*.cpp)
+file(GLOB GRAPHICS_OGL_INCLUDE jse/graphics/OpenGL/*.hpp)
 # Scene
 file(GLOB SCENE_SOURCE  jse/scene/*.cpp)
 file(GLOB SCENE_INCLUDE jse/scene/*.hpp)
 # Input
 file(GLOB INPUT_SOURCE  jse/input/*.cpp)
 file(GLOB INPUT_INCLUDE jse/input/*.hpp)
+# Input - SDL
+file(GLOB INPUT_SDL_SOURCE  jse/input/SDL/*.cpp)
+file(GLOB INPUT_SDL_INCLUDE jse/input/SDL/*.hpp)
 
 
 file(GLOB SOIL2_INCLUDE external/soil2/incs/*.h)
@@ -53,8 +59,12 @@ add_library(engine STATIC
   ${SYS_INCLUDE}
   ${INPUT_SOURCE}
   ${INPUT_INCLUDE}
+  ${INPUT_SDL_SOURCE}
+  ${INPUT_SDL_INCLUDE}
   ${GRAPHICS_SOURCE}
   ${GRAPHICS_INCLUDE}
+  ${GRAPHICS_OGL_SOURCE}
+  ${GRAPHICS_OGL_INCLUDE}
   ${MATH_SOURCE}
   ${MATH_INCLUDE}
   ${SCENE_SOURCE}
@@ -139,5 +149,7 @@ source_group("Core\\Math" FILES ${MATH_SOURCE} ${MATH_INCLUDE})
 source_group("Core\\Sys" FILES ${SYS_SOURCE} ${SYS_INCLUDE})
 source_group("Core\\Io" FILES ${IO_SOURCE} ${IO_INCLUDE})
 source_group("Graphics" FILES ${GRAPHICS_SOURCE} ${GRAPHICS_INCLUDE})
+source_group("Graphics\\OpenGL" FILES ${GRAPHICS_OGL_SOURCE} ${GRAPHICS_OGL_INCLUDE})
 source_group("Scene" FILES ${SCENE_SOURCE} ${SCENE_INCLUDE})
 source_group("Input" FILES ${INPUT_SOURCE} ${INPUT_INCLUDE})
+source_group("Input\\SDL" FILES ${INPUT_SDL_SOURCE} ${INPUT_SDL_INCLUDE})
