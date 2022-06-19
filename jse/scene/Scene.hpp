@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "core/Types.hpp"
-#include "scene/Mesh.hpp"
+#include "scene/MeshGroup.hpp"
 #include "scene/Node.hpp"
 #include "graphics/Material.hpp"
 #include "graphics/Image.hpp"
@@ -19,7 +19,7 @@ namespace jse::scene {
 	public:
 		Scene(const core::String& name_) :name(name_) {}
 		core::String name;
-		std::vector<Mesh> meshes;
+		std::vector<MeshGroup> meshes;
 		std::vector<Node> nodes;
 		std::vector<graphics::Image> images;
 		std::vector<graphics::Material> materials;

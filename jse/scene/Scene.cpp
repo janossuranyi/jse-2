@@ -45,6 +45,8 @@ namespace jse::scene {
 		scene.meshes.resize(model.meshes.size());
 		for (unsigned i = 0; i < model.meshes.size(); ++i)
 		{
+			MeshGroup grp;
+
 			tinygltf::Mesh& m = model.meshes[i];
 			for (unsigned p = 0; p < m.primitives.size(); ++p)
 			{
@@ -146,8 +148,9 @@ namespace jse::scene {
 						}
 					}
 				}
-				
+				grp.meshes.push_back(m);
 			}
+			scene.meshes[i] = grp;
 		}
 	}
 	static void parse_gltf_images(tinygltf::Model& model, Scene& scene)
