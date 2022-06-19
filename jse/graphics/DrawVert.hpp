@@ -110,6 +110,7 @@ namespace jse::graphics {
 
 		DrawVert();
 		DrawVert(const core::math::vec3& position);
+		void Clear();
 		void SetTextCoord(float s, float t);
 		void SetNormal(float x, float y, float z);
 		void SetNormal(const core::math::vec3& v);
@@ -138,11 +139,15 @@ namespace jse::graphics {
 
 	inline DrawVert::DrawVert()
 	{
-		memset(this, 0, sizeof(DrawVert));
+		Clear();
 	}
 	inline DrawVert::DrawVert(const core::math::vec3& position) : DrawVert()
 	{
 		this->position = position;
+	}
+	inline void DrawVert::Clear()
+	{
+		memset(this, 0, sizeof(DrawVert));
 	}
 	inline void DrawVert::SetTextCoord(float s, float t)
 	{
