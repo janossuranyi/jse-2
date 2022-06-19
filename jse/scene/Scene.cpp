@@ -48,6 +48,8 @@ namespace jse::scene {
 			MeshGroup grp;
 
 			tinygltf::Mesh& m = model.meshes[i];
+			grp.name = m.name;
+
 			for (unsigned p = 0; p < m.primitives.size(); ++p)
 			{
 				tinygltf::Primitive& src = m.primitives[p];
@@ -137,7 +139,7 @@ namespace jse::scene {
 						m.AllocTexCoords();
 						tinygltf::Accessor& access = model.accessors[attr.second];
 						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT, "Texcoord attributes are not floats !");
-						assert(access.type == TINYGLTF_TYPE_VEC3, "Texcoord attributes are not VEC3 !");
+						assert(access.type == TINYGLTF_TYPE_VEC2, "Texcoord attributes are not VEC2 !");
 						tinygltf::BufferView& view = model.bufferViews[access.bufferView];
 						tinygltf::Buffer buf = model.buffers[view.buffer];
 						int byteStride = access.ByteStride(view);
@@ -148,6 +150,29 @@ namespace jse::scene {
 						}
 					}
 				}
+
+				tinygltf::BufferView& view = model.bufferViews[idx.bufferView];
+				tinygltf::Buffer& buf = model.buffers[view.buffer];
+				assert(idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT || idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT, "Indices are not uints !");
+				assert(idx.type == TINYGLTF_TYPE_SCALAR, "Indices are not scalar !");
+				int byteStride = idx.ByteStride(view);
+				for (unsigned e = 0; e < idx.count; ++e)
+				{
+					if (idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT)
+					{
+						unsigned* data = reinterpret_cast<unsigned*>(buf.data.data() + view.byteOffset + idx.byteOffset + e * byteStride);
+						m.GetIndices()[e] = static_cast<triIndex_t>(*data);
+					}
+					else
+					{
+						unsigned short* data = reinterpret_cast<unsigned short*>(buf.data.data() + view.byteOffset + idx.byteOffset + e * byteStride);
+						m.GetIndices()[e] = *data;
+
+					}
+				}
+
+
+				m.SetMaterial(src.material);
 				grp.meshes.push_back(m);
 			}
 			scene.meshes[i] = grp;

@@ -12,49 +12,35 @@ namespace jse::scene {
 
 	Mesh::~Mesh()
 	{
-		if (xyz)		delete[] xyz;
-		if (normals)	delete[] normals;
-		if (tangents)	delete[] tangents;
-		if (st)			delete[] st;
-		if (colors)		delete[] colors;
-		if (indices)	delete[] indices;
 	}
 
 	void Mesh::AllocPositions(unsigned numPos, unsigned numIndices, const primitiveType_t type)
 	{
 		if (numPrimitives > 0) return;
 
-		xyz = new vec3[numPos];
-		indices = new triIndex_t[numIndices];
+		xyz.resize(numPos);
+		indices.resize(numIndices);
 
+		this->type = type;
 		this->numPrimitives = numPos;
 		this->numIndices = numIndices;
 	}
 
 	void Mesh::AllocColors()
 	{
-		if (numPrimitives > 0 && !colors)
-			colors = new vec3[numPrimitives];
+		colors.resize(numPrimitives);
 	}
 	void Mesh::AllocNormals()
 	{
-		if (numPrimitives > 0 && !normals)
-			normals = new vec3[numPrimitives];
+		normals.resize(numPrimitives);
 	}
 	void Mesh::AllocTexCoords()
 	{
-		if (numPrimitives > 0 && !st)
-			st = new vec2[numPrimitives];
+		st.resize(numPrimitives);
 	}
 	void Mesh::AllocTangents()
 	{
-		if (numPrimitives > 0 && !tangents)
-			tangents = new vec4[numPrimitives];
-	}
-	void Mesh::AllocColors()
-	{
-		if (numPrimitives > 0 && !colors)
-			colors = new vec3[numPrimitives];
+		tangents.resize(numPrimitives);
 	}
 
 }

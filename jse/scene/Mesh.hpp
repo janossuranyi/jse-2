@@ -2,7 +2,7 @@
 #define JSE_SCENE_MESH_H
 
 #include <cstdint>
-
+#include <vector>
 #include "core/math/Vector.hpp"
 #include "core/math/Matrix.hpp"
 
@@ -32,32 +32,44 @@ namespace jse::scene {
 		void AllocTexCoords();
 		void AllocColors();
 
+		void SetMaterial(int material_);
+
 		int GetNumPrimitives() const;
 		int GetNumIndices() const;
-		core::math::vec3* GetPositions();
-		core::math::vec3* GetNormals();
-		core::math::vec3* GetColors();
-		core::math::vec4* GetTangents();
-		core::math::vec2* GetTexCoords();
-		triIndex_t* GetIndices();
+		int GetMaterial() const;
+		std::vector<core::math::vec3>& GetPositions();
+		std::vector<core::math::vec3>& GetNormals();
+		std::vector<core::math::vec3>& GetColors();
+		std::vector<core::math::vec4>& GetTangents();
+		std::vector<core::math::vec2>& GetTexCoords();
+		std::vector<triIndex_t>& GetIndices();
 
 		void SetLocalTransform(const core::math::mat4& mtx);
 		const core::math::mat4& GetLocalTransform() const;
 	private:
 		primitiveType_t type;
-		core::math::vec3* xyz{};
-		core::math::vec3* normals{};
-		core::math::vec4* tangents{};
-		core::math::vec2* st{};
-		core::math::vec3* colors{};
-		triIndex_t* indices{};
+		std::vector<core::math::vec3> xyz;
+		std::vector<core::math::vec3> normals;
+		std::vector<core::math::vec4> tangents;
+		std::vector<core::math::vec2> st;
+		std::vector<core::math::vec3> colors;
+		std::vector<triIndex_t> indices;
 
 		core::math::mat4 localTransform{ 1.0f };
 
 		int numPrimitives{ 0 };
 		int numIndices{ 0 };
+		int material{ -1 };
 	};
 
+	inline int Mesh::GetMaterial() const
+	{
+		return material;
+	}
+	inline void Mesh::SetMaterial(int material_)
+	{
+		material = material_;
+	}
 	inline const core::math::mat4& Mesh::GetLocalTransform() const
 	{
 		return localTransform;
@@ -74,27 +86,27 @@ namespace jse::scene {
 	{
 		return numIndices;
 	}
-	inline core::math::vec3* Mesh::GetColors()
+	inline std::vector<core::math::vec3>& Mesh::GetColors()
 	{
 		return colors;
 	}
-	inline core::math::vec3* Mesh::GetPositions()
+	inline std::vector<core::math::vec3>& Mesh::GetPositions()
 	{
 		return xyz;
 	}
-	inline core::math::vec3* Mesh::GetNormals()
+	inline std::vector<core::math::vec3>& Mesh::GetNormals()
 	{
 		return normals;
 	}
-	inline core::math::vec4* Mesh::GetTangents()
+	inline std::vector<core::math::vec4>& Mesh::GetTangents()
 	{
 		return tangents;
 	}
-	inline core::math::vec2* Mesh::GetTexCoords()
+	inline std::vector<core::math::vec2>& Mesh::GetTexCoords()
 	{
 		return st;
 	}
-	inline triIndex_t* Mesh::GetIndices()
+	inline std::vector<triIndex_t>& Mesh::GetIndices()
 	{
 		return indices;
 	}
