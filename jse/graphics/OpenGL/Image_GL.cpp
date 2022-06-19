@@ -57,6 +57,9 @@ namespace jse::graphics {
 		case FMT_SRGB:
 			internalFormat = GL_SRGB;
 			break;
+		case FMT_SRGBA:
+			internalFormat = GL_SRGB_ALPHA;
+			break;
 		case FMT_DXT1:
 			internalFormat = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
 			break;

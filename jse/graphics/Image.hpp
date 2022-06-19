@@ -22,6 +22,7 @@ namespace jse::graphics {
 		FMT_RGBA,
 		FMT_RGBA8,
 		FMT_SRGB,
+		FMT_SRGBA,
 		FMT_DXT1,
 		FMT_DXT5
 	};
