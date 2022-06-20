@@ -10,7 +10,7 @@
 
 namespace jse::input {
 
-    using namespace core::math;
+    using namespace math;
 
     class InputServiceSDL : public InputService
     {

@@ -21,10 +21,10 @@ namespace jse::input {
 		virtual bool IsKeyPressed() = 0;
 		virtual bool IsKeyReleased() = 0;
 
-		virtual core::math::ivec2 GetMousePosition() const = 0;
+		virtual math::ivec2 GetMousePosition() const = 0;
 
 		virtual void SetRelativeMouseMode(const bool a0) = 0;
-		virtual core::math::ivec2 GetRelativeMousePosition() const = 0;
+		virtual math::ivec2 GetRelativeMousePosition() const = 0;
 
 		virtual bool IsWheelUpMoved() const = 0;
 		virtual bool IsWheelDownMoved() const = 0;

@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "core/Types.hpp"
-#include "core/math/Matrix.hpp";
+#include "core/math/Matrix.hpp"
 
 namespace jse::scene {
 
@@ -29,8 +29,8 @@ namespace jse::scene {
 
 		std::vector<int> children;
 		std::vector<float> weights;
-		core::math::mat4 modelTransform{ 1.0f };
-		core::math::mat4 worldTransform{ 1.0f };
+		math::mat4 modelTransform{ 1.0f };
+		math::mat4 worldTransform{ 1.0f };
 	};
 
 }

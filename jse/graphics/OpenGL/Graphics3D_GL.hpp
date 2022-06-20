@@ -28,12 +28,13 @@ namespace jse::graphics {
 		~Graphics3D_GL() override;
 		bool Init(const createWindow_t& cw) override;
 		bool IsFullScreen() const override;
+		bool IsInitalized() const override;
 	private:
 		SDL_Window* windowPtr;
 		SDL_GLContext context;
 		int version;
 		bool fullScreen;
-		bool initialized;
+		bool initialized{ false };
 		core::String renderer;
 		core::String vendor;
 		GLConfig contextInfo;

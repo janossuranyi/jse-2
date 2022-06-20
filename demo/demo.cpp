@@ -15,7 +15,7 @@
 
 //#define clamp(x, low, high) ( (x) < (low) ? (low) : ((x) > (high) ? (high) : (x)) )
 
-const std::string data_dir = "d:/data";
+const std::string data_dir = "d:/src/jse-2";
 
 #define IS_DDS(p) ( ((const char*)(p))[0] == 'D' && ((const char*)(p))[1] == 'D' && ((const char*)(p))[2] == 'S' )
 
@@ -82,17 +82,14 @@ int main(int argc, char** argv)
 	io::FileSystem fs;
 	fs.SetWorkingDir(data_dir);
 
-	io::Info(fs.GetWorkingDir().c_str());
-
 	String err;
 	String warn;
 	tinygltf::Model model;
-
 	tinygltf::TinyGLTF loader;
 	loader.SetImageLoader(myLoadImageDataFunction, nullptr);
 
-	Scene scene("Scene1");
-	scene.LoadFromGltf(fs.Resolve("cube.gltf"));
+//	Scene scene("Scene1");
+//	scene.LoadFromGltf(fs.Resolve("assets/cube.gltf"));
 
 
 	while (!input->IsButtonDown(MouseButton::MB_Left))

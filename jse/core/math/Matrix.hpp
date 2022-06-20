@@ -6,7 +6,7 @@
 
 #include "core/math/Vector.hpp"
 
-namespace jse::core::math {
+namespace jse::math {
 
 	using mat3 = glm::mat3;
 	using mat4 = glm::mat4;

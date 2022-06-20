@@ -21,16 +21,16 @@ namespace jse::graphics {
 
 		core::String name;
 		cameraType_t type{ CT_PERSPECTIVE };
-		float aspectRatio;
+		float aspectRatio{ 0.0f };
 		float yfov{ 45.0 * 3.1415f/180.0f };
 		float zfar{ 100.0f };
 		float znear{ 0.1f };
 		float xmag{ 1.0f };
 		float ymag{ 1.0f };
 
-		core::math::vec3 eye{ 0.0f };
-		core::math::vec3 target{ 0.0f };
-		core::math::vec3 up{ 0.0f, 1.0f, 0.0f };
+		math::vec3 eye{ 0.0f };
+		math::vec3 target{ 0.0f };
+		math::vec3 up{ 0.0f, 1.0f, 0.0f };
 
 	};
 }

@@ -190,6 +190,7 @@ namespace jse::graphics {
 		renderer = String(reinterpret_cast<const char*>( gl_renderer ));
 		vendor = String(reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
 
+		initialized = true;
 		return true;
 	}
 
@@ -197,6 +198,11 @@ namespace jse::graphics {
 	bool Graphics3D_GL::IsFullScreen() const
 	{
 		return fullScreen;
+	}
+
+	bool Graphics3D_GL::IsInitalized() const
+	{
+		return initialized;
 	}
 
 }

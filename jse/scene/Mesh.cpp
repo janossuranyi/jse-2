@@ -4,43 +4,24 @@
 #include <cassert>
 namespace jse::scene {
 
-	using namespace core::math;
+	using namespace math;
 
 	Mesh::Mesh()
-	{		
+	{
+		mode = DM_TRIANGLES;
 	}
 
 	Mesh::~Mesh()
 	{
 	}
 
-	void Mesh::AllocPositions(unsigned numPos, unsigned numIndices, const primitiveType_t type)
+	void Mesh::SetParameters(unsigned numPos, unsigned numIndices, const drawMode_t mode_)
 	{
 		if (numPrimitives > 0) return;
 
-		xyz.resize(numPos);
-		indices.resize(numIndices);
-
-		this->type = type;
+		this->mode = mode_;
 		this->numPrimitives = numPos;
 		this->numIndices = numIndices;
-	}
-
-	void Mesh::AllocColors()
-	{
-		colors.resize(numPrimitives);
-	}
-	void Mesh::AllocNormals()
-	{
-		normals.resize(numPrimitives);
-	}
-	void Mesh::AllocTexCoords()
-	{
-		st.resize(numPrimitives);
-	}
-	void Mesh::AllocTangents()
-	{
-		tangents.resize(numPrimitives);
 	}
 
 }

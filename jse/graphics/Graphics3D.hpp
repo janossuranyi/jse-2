@@ -15,6 +15,7 @@ namespace jse::graphics {
 		virtual ~Graphics3D() {}
 		virtual bool Init(const createWindow_t& cw) = 0;
 		virtual bool IsFullScreen() const = 0;
+		virtual bool IsInitalized() const = 0;
 	};
 
 	extern Graphics3D* GetGraphics();

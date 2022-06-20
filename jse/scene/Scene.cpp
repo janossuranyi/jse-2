@@ -1,12 +1,17 @@
-#include "scene/Scene.hpp"
-#include "graphics/Light.hpp"
 #include "tiny_gltf.h"
 
 #include "core/io/Logger.hpp"
+#include "core/io/MemoryBuffer.hpp"
+#include "scene/Scene.hpp"
+#include "graphics/Light.hpp"
+
+#include <cassert>
 
 namespace jse::scene {
 
 	using namespace graphics;
+	using namespace core;
+	using namespace core::io;
 
 	static void parse_gltf_lights(tinygltf::Model& model, Scene& scene)
 	{
@@ -56,25 +61,25 @@ namespace jse::scene {
 				
 				tinygltf::Accessor& idx = model.accessors[src.indices];
 
-				primitiveType_t pType = primitiveType_t::PT_TRIANGLES;
+				drawMode_t pType = drawMode_t::DM_TRIANGLES;
 				switch (src.mode) {
 				case TINYGLTF_MODE_LINE:
-					pType = primitiveType_t::PT_LINES;
+					pType = drawMode_t::DM_LINES;
 					break;
 				case TINYGLTF_MODE_LINE_STRIP:
-					pType = primitiveType_t::PT_LINE_STRIP;
+					pType = drawMode_t::DM_LINE_STRIP;
 					break;
 				case TINYGLTF_MODE_POINTS:
-					pType = primitiveType_t::PT_POINTS;
+					pType = drawMode_t::DM_POINTS;
 					break;
 				case TINYGLTF_MODE_TRIANGLE_FAN:
-					pType = primitiveType_t::PT_TRIANGLE_FAN;
+					pType = drawMode_t::DM_TRIANGLE_FAN;
 					break;
 				case TINYGLTF_MODE_TRIANGLE_STRIP:
-					pType = primitiveType_t::PT_TRIANGLE_STRIP;
+					pType = drawMode_t::DM_TRIANGLE_STRIP;
 					break;
 				case TINYGLTF_MODE_LINE_LOOP:
-					core::io::Warning("Draw mode not expected !");
+					pType = drawMode_t::DM_LINE_LOOP;
 					break;
 				}
 
@@ -85,19 +90,14 @@ namespace jse::scene {
 					if (attr.first == "POSITION")
 					{
 						tinygltf::Accessor& access = model.accessors[attr.second];
-						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT, "Position attributes are not floats !");
-						assert(access.type == TINYGLTF_TYPE_VEC3, "Position attributes are not VEC3 !");
+						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
+						assert(access.type == TINYGLTF_TYPE_VEC3);
 						tinygltf::BufferView& view = model.bufferViews[access.bufferView];
-						tinygltf::Buffer buf = model.buffers[view.buffer];
+						tinygltf::Buffer& buf = model.buffers[view.buffer];
 						int byteStride = access.ByteStride(view);
 
-						m.AllocPositions(access.count, idx.count, pType);
-
-						for (unsigned e = 0; e < access.count; ++e)
-						{
-							float* data = reinterpret_cast<float*>(buf.data.data() + view.byteOffset + access.byteOffset + e * byteStride);
-							m.GetPositions()[e] = core::math::vec3(data[0], data[1], data[2]);
-						}
+						m.SetParameters((unsigned)access.count, (unsigned)idx.count, pType);
+												
 						break;
 					}
 				}
@@ -106,74 +106,53 @@ namespace jse::scene {
 				{
 					if (attr.first == "NORMAL")
 					{
-						m.AllocNormals();
 						tinygltf::Accessor& access = model.accessors[attr.second];
-						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT, "Normal attributes are not floats !");
-						assert(access.type == TINYGLTF_TYPE_VEC3, "Normal attributes are not VEC3 !");
+						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
+						assert(access.type == TINYGLTF_TYPE_VEC3);
 						tinygltf::BufferView& view = model.bufferViews[access.bufferView];
-						tinygltf::Buffer buf = model.buffers[view.buffer];
+						tinygltf::Buffer& buf = model.buffers[view.buffer];
 						int byteStride = access.ByteStride(view);
-						for (unsigned e = 0; e < access.count; ++e)
-						{
-							float* data = reinterpret_cast<float*>(buf.data.data() + view.byteOffset + access.byteOffset + e * byteStride);
-							m.GetNormals()[e] = core::math::vec3(data[0], data[1], data[2]);
-						}
+
 					}
 					else if (attr.first == "TANGENT")
 					{
-						m.AllocTangents();
 						tinygltf::Accessor& access = model.accessors[attr.second];
-						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT, "Tangent attributes are not floats !");
-						assert(access.type == TINYGLTF_TYPE_VEC4, "Tangent attributes are not VEC4 !");
+						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
+						assert(access.type == TINYGLTF_TYPE_VEC4);
 						tinygltf::BufferView& view = model.bufferViews[access.bufferView];
-						tinygltf::Buffer buf = model.buffers[view.buffer];
+						tinygltf::Buffer& buf = model.buffers[view.buffer];
 						int byteStride = access.ByteStride(view);
-						for (unsigned e = 0; e < access.count; ++e)
-						{
-							float* data = reinterpret_cast<float*>(buf.data.data() + view.byteOffset + access.byteOffset + e * byteStride);
-							m.GetTangents()[e] = core::math::vec4(data[0], data[1], data[2], data[3]);
-						}
+
 					}
 					else if (attr.first == "TEXCOORD_0")
 					{
-						m.AllocTexCoords();
 						tinygltf::Accessor& access = model.accessors[attr.second];
-						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT, "Texcoord attributes are not floats !");
-						assert(access.type == TINYGLTF_TYPE_VEC2, "Texcoord attributes are not VEC2 !");
+						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
+						assert(access.type == TINYGLTF_TYPE_VEC2);
 						tinygltf::BufferView& view = model.bufferViews[access.bufferView];
 						tinygltf::Buffer buf = model.buffers[view.buffer];
 						int byteStride = access.ByteStride(view);
-						for (unsigned e = 0; e < access.count; ++e)
-						{
-							float* data = reinterpret_cast<float*>(buf.data.data() + view.byteOffset + access.byteOffset + e * byteStride);
-							m.GetTexCoords()[e] = core::math::vec3(data[0], data[1], data[2]);
-						}
+
 					}
 				}
 
 				tinygltf::BufferView& view = model.bufferViews[idx.bufferView];
 				tinygltf::Buffer& buf = model.buffers[view.buffer];
-				assert(idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT || idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT, "Indices are not uints !");
-				assert(idx.type == TINYGLTF_TYPE_SCALAR, "Indices are not scalar !");
+				assert(idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT || idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT);
+				assert(idx.type == TINYGLTF_TYPE_SCALAR);
 				int byteStride = idx.ByteStride(view);
 				for (unsigned e = 0; e < idx.count; ++e)
 				{
 					if (idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT)
 					{
-						unsigned* data = reinterpret_cast<unsigned*>(buf.data.data() + view.byteOffset + idx.byteOffset + e * byteStride);
-						m.GetIndices()[e] = static_cast<triIndex_t>(*data);
 					}
 					else
 					{
-						unsigned short* data = reinterpret_cast<unsigned short*>(buf.data.data() + view.byteOffset + idx.byteOffset + e * byteStride);
-						m.GetIndices()[e] = *data;
-
 					}
 				}
 
-
 				m.SetMaterial(src.material);
-				grp.meshes.push_back(m);
+				grp.meshes.push_back(std::move(m));
 			}
 			scene.meshes[i] = grp;
 		}
