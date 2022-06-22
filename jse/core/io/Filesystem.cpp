@@ -6,7 +6,8 @@
 #include "core/io/Filesystem.hpp"
 #include "core/io/Logger.hpp"
 
-namespace jse::core::io {
+namespace jse {
+
 	namespace fs = std::filesystem;
 
 	FileSystem::FileSystem()
@@ -14,23 +15,23 @@ namespace jse::core::io {
 		workingDir = fs::current_path();
 	}
 
-	void FileSystem::SetWorkingDir(const String& p0)
+	void FileSystem::SetWorkingDir(const std::string& p0)
 	{
 		workingDir = fs::path{ p0 }.make_preferred();
 	}
 
-	String FileSystem::GetWorkingDir() const
+	std::string FileSystem::GetWorkingDir() const
 	{
 		return workingDir.generic_string();
 	}
 
-	String FileSystem::Resolve(const String& aPath) const
+	std::string FileSystem::Resolve(const std::string& aPath) const
 	{
 		const fs::path p = workingDir / aPath;
 		return p.string();
 	}
 
-	bool FileSystem::ReadTextFile(const String& fileName, String& output)
+	bool FileSystem::ReadTextFile(const std::string& fileName, std::string& output)
 	{
 
 		std::ifstream ifs(fileName.c_str(), std::ios::in);
@@ -51,12 +52,12 @@ namespace jse::core::io {
 		return true;
 	}
 
-	bool FileSystem::ReadTextFileBase(const String& filename, String& output)
+	bool FileSystem::ReadTextFileBase(const std::string& filename, std::string& output)
 	{
 		return ReadTextFile(Resolve(filename), output);
 	}
 
-	ByteVec FileSystem::ReadBinaryFile(const String& filename)
+	ByteVec FileSystem::ReadBinaryFile(const std::string& filename)
 	{
 		ByteVec result;
 
@@ -73,7 +74,7 @@ namespace jse::core::io {
 		return result;
 	}
 
-	StrVec FileSystem::GetDirectoryEntries(const String& dirname, const char* filter)
+	StrVec FileSystem::GetDirectoryEntries(const std::string& dirname, const char* filter)
 	{
 		StrVec result;
 		const fs::path path{ dirname };
@@ -100,14 +101,14 @@ namespace jse::core::io {
 			}
 			catch (const std::exception& ex)
 			{
-				io::Error("Invalid regexp (%s) %s", filter, ex.what());
+				Error("Invalid regexp (%s) %s", filter, ex.what());
 			}
 
 		}
 		return result;
 	}
 
-	void FileSystem::GetDirectoryEntries(const String& dirname, const std::function<void(const String&)>& fn, const char* filter)
+	void FileSystem::GetDirectoryEntries(const std::string& dirname, const std::function<void(const std::string&)>& fn, const char* filter)
 	{
 		for (auto e : GetDirectoryEntries(dirname, filter)) { 
 			fn(e); 

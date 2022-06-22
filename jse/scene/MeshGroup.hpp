@@ -5,12 +5,12 @@
 #include "core/Types.hpp"
 #include "scene/Mesh.hpp"
 
-namespace jse::scene {
+namespace jse {
 
     class MeshGroup
     {
     public:
-        core::String name;
+        std::string name;
         std::vector<Mesh> meshes;
     };
 }

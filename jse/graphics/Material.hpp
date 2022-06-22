@@ -4,7 +4,7 @@
 #include "core/Types.hpp"
 #include "graphics/Image.hpp"
 
-namespace jse::graphics {
+namespace jse {
 
 
 	enum alphaMode_t
@@ -32,7 +32,7 @@ namespace jse::graphics {
 	class Material
 	{
 	private:
-		core::String name;
+		std::string name;
 		PBRMetallicRoughness pbrMettallicRoughness;
 		Image* normalTexture;
 		Image* occlusionTexture;

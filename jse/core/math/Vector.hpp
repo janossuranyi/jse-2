@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace jse::math {
+namespace jse {
 
 	using vec2 = glm::vec2;
 	using vec3 = glm::vec3;

@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <cstdint>
-namespace jse::core::io {
+namespace jse {
 
     template<class T>
 	class MemoryBuffer
@@ -33,15 +33,18 @@ namespace jse::core::io {
 		}
 		MemoryBuffer& operator=(const MemoryBuffer& other);
 		MemoryBuffer& operator=(MemoryBuffer&& other) noexcept;
+
 		T& operator[](size_t index);
+
 		bool IsAllocated() const { return size > 0; }
 		size_t GetAllocated() const { return size; }
-        size_t GetStride() const { return stride; }
-		size_t GetSize() const { return size / stride; }
+        size_t GetStride() const { return stride > 0 ? stride : sizeof(T); }
+		size_t GetSize() const { return size / (stride > 0 ? stride : sizeof(T)); }
 		void Reset() { offset = 0; }
-		unsigned char* BytePtr() { return static_cast<unsigned char*>(data); }
+		void Purge();
 		bool HasNext() const { return offset + sizeof(T) <= size; }
 		T* NextPtr();
+		void* RawPtr() { return (void*)data; }
 	private:
 		char* data;
 		size_t size;
@@ -49,6 +52,19 @@ namespace jse::core::io {
 		size_t offset;
 	};
 
+	template<class T>
+	void MemoryBuffer<T>::Purge()
+	{
+		if (data)
+		{ 
+			delete[] data;
+			data = nullptr;
+		}
+
+		size = 0;
+		offset = 0;
+		stride = 0;
+	}
 
 	template<class T>
 	MemoryBuffer<T>& MemoryBuffer<T>::operator=(MemoryBuffer<T>&& other) noexcept
@@ -78,7 +94,7 @@ namespace jse::core::io {
 		if (!HasNext())
 			return nullptr;
 
-		T* ptr = static_cast<T*>(data + offset);
+		T* ptr = reinterpret_cast<T*>(data + offset);
 
 		offset += stride;
 

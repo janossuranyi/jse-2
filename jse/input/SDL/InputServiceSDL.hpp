@@ -8,9 +8,7 @@
 #include <mutex>
 #include <SDL.h>
 
-namespace jse::input {
-
-    using namespace math;
+namespace jse {
 
     class InputServiceSDL : public InputService
     {

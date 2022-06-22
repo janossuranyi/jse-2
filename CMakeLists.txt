@@ -49,7 +49,6 @@ file(GLOB INPUT_SDL_INCLUDE jse/input/SDL/*.hpp)
 file(GLOB SOIL2_INCLUDE external/soil2/incs/*.h)
 file(GLOB SOIL2_SOURCE external/soil2/srcs/*.c)
 
-
 add_library(engine STATIC 
   ${CORE_SOURCE}
   ${CORE_INCLUDE}
@@ -109,6 +108,7 @@ link_directories(
 #message(STATUS "Assimp lib path: ${ASSIMP_LIBRARY_DIRS}")
 
 file(GLOB SHADERS assets/shaders/*.glsl)
+file(GLOB SHADERS_INC assets/shaders/*.inc)
 
 add_executable(demo	
   demo/demo.cpp
@@ -153,3 +153,5 @@ source_group("Graphics\\OpenGL" FILES ${GRAPHICS_OGL_SOURCE} ${GRAPHICS_OGL_INCL
 source_group("Scene" FILES ${SCENE_SOURCE} ${SCENE_INCLUDE})
 source_group("Input" FILES ${INPUT_SOURCE} ${INPUT_INCLUDE})
 source_group("Input\\SDL" FILES ${INPUT_SDL_SOURCE} ${INPUT_SDL_INCLUDE})
+source_group("Shaders" FILES ${SHADERS} ${SHADERS_INC})
+

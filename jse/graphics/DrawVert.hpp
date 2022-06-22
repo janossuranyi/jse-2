@@ -2,6 +2,12 @@
 #define JSE_GRAPHICS_DRAWVERT_H
 
 #include "core/math/Vector.hpp"
+#define DRAWVERT_POSITION_INDEX (0)
+#define DRAWVERT_TEXCOORD_INDEX (1)
+#define DRAWVERT_NORMAL_INDEX (2)
+#define DRAWVERT_TANGENT_INDEX (3)
+#define DRAWVERT_COLOR_INDEX (4)
+#define DRAWVERT_COLOR2_INDEX (5)
 
 #define DRAWVERT_POSITION_OFFSET (0*4)
 #define DRAWVERT_TEXCOORD_OFFSET (3*4)
@@ -35,7 +41,7 @@
 #define HF_SIGN(x)		((x&32768)?-1:1)
 
 
-namespace jse::graphics {
+namespace jse {
 
 	enum VertexLayout
 	{
@@ -101,7 +107,7 @@ namespace jse::graphics {
 	class DrawVert
 	{
 	public:
-		core::math::vec3 position;	// 12
+		vec3 position;	// 12
 		halfFloat_t texcoord[2];	//  4
 		uint8_t normal[4];			//  4
 		uint8_t tangent[4];			//  4
@@ -109,23 +115,26 @@ namespace jse::graphics {
 		uint8_t color2[4];			//  4
 
 		DrawVert();
-		DrawVert(const core::math::vec3& position);
+		DrawVert(const vec3& position);
 		void Clear();
 		void SetTextCoord(float s, float t);
+		void SetTextCoord(const vec2& v);
+		void SetPosition(float x, float y, float z);
+		void SetPosition(const vec3& v);
 		void SetNormal(float x, float y, float z);
-		void SetNormal(const core::math::vec3& v);
+		void SetNormal(const vec3& v);
 		void SetTangent(float x, float y, float z, float w);
-		void SetTangent(const core::math::vec4& v);
+		void SetTangent(const vec4& v);
 		void SetColor(float r, float g, float b, float a);
-		void SetColor(const core::math::vec4& v);
+		void SetColor(const vec4& v);
 		void SetColor2(float r, float g, float b, float a);
-		void SetColor2(const core::math::vec4& v);
-		const core::math::vec3& GetPosition() const;
-		const core::math::vec2 GetTexCoords() const;
-		const core::math::vec3 GetNormal() const;
-		const core::math::vec4 GetTangent() const;
-		const core::math::vec4 GetColor() const;
-		const core::math::vec4 GetColor2() const;
+		void SetColor2(const vec4& v);
+		const vec3& GetPosition() const;
+		const vec2 GetTexCoords() const;
+		const vec3 GetNormal() const;
+		const vec4 GetTangent() const;
+		const vec4 GetColor() const;
+		const vec4 GetColor2() const;
 
 	}; // 32
 
@@ -141,13 +150,17 @@ namespace jse::graphics {
 	{
 		Clear();
 	}
-	inline DrawVert::DrawVert(const core::math::vec3& position) : DrawVert()
+	inline DrawVert::DrawVert(const vec3& position) : DrawVert()
 	{
 		this->position = position;
 	}
 	inline void DrawVert::Clear()
 	{
 		memset(this, 0, sizeof(DrawVert));
+	}
+	inline void DrawVert::SetTextCoord(const vec2& v)
+	{
+		SetTextCoord(v.s, v.t);
 	}
 	inline void DrawVert::SetTextCoord(float s, float t)
 	{
@@ -161,18 +174,28 @@ namespace jse::graphics {
 		normal[2] = VERTEX_FLOAT_TO_BYTE(z);
 		normal[3] = VERTEX_FLOAT_TO_BYTE(0);
 	}
-	inline void DrawVert::SetNormal(const core::math::vec3& v)
+	inline void DrawVert::SetNormal(const vec3& v)
 	{
 		SetNormal(v.x, v.y, v.z);
 	}
+	inline void DrawVert::SetPosition(float x, float y, float z)
+	{
+		position[0] = (x);
+		position[1] = (y);
+		position[2] = (z);
+	}
+	inline void DrawVert::SetPosition(const vec3& v)
+	{
+		position = v;
+	}
 	inline void DrawVert::SetTangent(float x, float y, float z, float w)
 	{
-		normal[0] = VERTEX_FLOAT_TO_BYTE(x);
-		normal[1] = VERTEX_FLOAT_TO_BYTE(y);
-		normal[2] = VERTEX_FLOAT_TO_BYTE(z);
-		normal[3] = VERTEX_FLOAT_TO_BYTE(w);
+		tangent[0] = VERTEX_FLOAT_TO_BYTE(x);
+		tangent[1] = VERTEX_FLOAT_TO_BYTE(y);
+		tangent[2] = VERTEX_FLOAT_TO_BYTE(z);
+		tangent[3] = VERTEX_FLOAT_TO_BYTE(w);
 	}
-	inline void DrawVert::SetTangent(const core::math::vec4& v)
+	inline void DrawVert::SetTangent(const vec4& v)
 	{
 		SetTangent(v.x, v.y, v.z, v.w);
 	}
@@ -183,11 +206,11 @@ namespace jse::graphics {
 		color[2] = static_cast<uint8_t>(255.0f * b);
 		color[3] = static_cast<uint8_t>(255.0f * a);
 	}
-	inline void DrawVert::SetColor(const core::math::vec4& v)
+	inline void DrawVert::SetColor(const vec4& v)
 	{
 		SetColor(v.r, v.g, v.b, v.a);
 	}
-	inline void DrawVert::SetColor2(const core::math::vec4& v)
+	inline void DrawVert::SetColor2(const vec4& v)
 	{
 		SetColor2(v.r, v.g, v.b, v.a);
 	}
@@ -198,45 +221,45 @@ namespace jse::graphics {
 		color2[2] = static_cast<uint8_t>(255.0f * b);
 		color2[3] = static_cast<uint8_t>(255.0f * a);
 	}
-	inline const core::math::vec3& DrawVert::GetPosition() const
+	inline const vec3& DrawVert::GetPosition() const
 	{
 		return position;
 	}
-	inline const core::math::vec2 DrawVert::GetTexCoords() const
+	inline const vec2 DrawVert::GetTexCoords() const
 	{
-		return core::math::vec2(F16toF32(texcoord[0]), F16toF32(texcoord[1]));
+		return vec2(F16toF32(texcoord[0]), F16toF32(texcoord[1]));
 	}
-	inline const core::math::vec3 DrawVert::GetNormal() const
+	inline const vec3 DrawVert::GetNormal() const
 	{
-		return core::math::vec3(
+		return vec3(
 			VERTEX_BYTE_TO_FLOAT(normal[0]),
 			VERTEX_BYTE_TO_FLOAT(normal[1]),
 			VERTEX_BYTE_TO_FLOAT(normal[2])
 		);
 	}
-	inline const core::math::vec4 DrawVert::GetTangent() const
+	inline const vec4 DrawVert::GetTangent() const
 	{
-		return core::math::vec4(
+		return vec4(
 			VERTEX_BYTE_TO_FLOAT(tangent[0]),
 			VERTEX_BYTE_TO_FLOAT(tangent[1]),
 			VERTEX_BYTE_TO_FLOAT(tangent[2]),
 			VERTEX_BYTE_TO_FLOAT(tangent[3])
 		);
 	}
-	inline const core::math::vec4 DrawVert::GetColor() const
+	inline const vec4 DrawVert::GetColor() const
 	{
 		const float inv = 1.0f / 255.0f;
-		return core::math::vec4(
+		return vec4(
 			color[0] * inv,
 			color[1] * inv,
 			color[2] * inv,
 			color[3] * inv
 		);
 	}
-	inline const core::math::vec4 DrawVert::GetColor2() const
+	inline const vec4 DrawVert::GetColor2() const
 	{
 		const float inv = 1.0f / 255.0f;
-		return core::math::vec4(
+		return vec4(
 			color2[0] * inv,
 			color2[1] * inv,
 			color2[2] * inv,

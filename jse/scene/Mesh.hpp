@@ -6,8 +6,9 @@
 #include "core/math/Vector.hpp"
 #include "core/math/Matrix.hpp"
 #include "core/io/MemoryBuffer.hpp"
+#include "graphics/DrawVert.hpp"
 
-namespace jse::scene {
+namespace jse {
 	
 	using triIndex_t = uint32_t;
 
@@ -34,11 +35,31 @@ namespace jse::scene {
 		int GetNumPrimitives() const;
 		int GetNumIndices() const;
 		int GetMaterial() const;
+		MemoryBuffer<vec2>& GetTexCoords() { return st; }
+		MemoryBuffer<vec3>& GetPositions() { return xyz; };
+		MemoryBuffer<vec3>& GetNormals() { return normals; }
+		MemoryBuffer<vec4>& GetTangents() { return tangents; }
+		MemoryBuffer<vec4>& GetColors() { return colors; }
+
+		MemoryBuffer<unsigned short>& GetIndex16() { return sIndex; };
+		MemoryBuffer<unsigned int>& GetIndex32() { return iIndex; };
+
+		MemoryBuffer<DrawVert> CreateDrawVerts();
 	private:
 		drawMode_t mode;
 		int numPrimitives{ 0 };
-		int numIndices{ 0 };
+		int numIndices{ 0 };	
 		int material{ -1 };
+
+		MemoryBuffer<vec2> st;
+		MemoryBuffer<vec3> xyz;
+		MemoryBuffer<vec3> normals;
+		MemoryBuffer<vec4> tangents;
+		MemoryBuffer<vec4> colors;
+
+		MemoryBuffer<unsigned short> sIndex;
+		MemoryBuffer<unsigned int> iIndex;
+
 	};
 
 	inline int Mesh::GetMaterial() const

@@ -6,7 +6,7 @@
 namespace jse {
 
 
-	ArrayBufferObject::ArrayBufferObject()
+	ElementBufferObject::ElementBufferObject()
 	{
 		buffer = GL_INVALID_INDEX;
 		alloced = 0;
@@ -14,7 +14,7 @@ namespace jse {
 		bufferUsage_ = BU_LAST_ENUM;
 	}
 
-	ArrayBufferObject::~ArrayBufferObject()
+	ElementBufferObject::~ElementBufferObject()
 	{
 		if (buffer != GL_INVALID_INDEX)
 		{
@@ -22,7 +22,20 @@ namespace jse {
 		}
 	}
 
-	ArrayBufferObject& ArrayBufferObject::operator=(ArrayBufferObject&& other) noexcept
+	ElementBufferObject::ElementBufferObject(ElementBufferObject&& other) noexcept
+	{
+		size = other.size;
+		buffer = other.buffer;
+		alloced = other.alloced;
+		bufferUsage_ = other.bufferUsage_;
+
+		other.size = 0;
+		other.buffer = GL_INVALID_INDEX;
+		other.alloced = 0;
+		other.bufferUsage_ = BU_LAST_ENUM;
+	}
+
+	ElementBufferObject& ElementBufferObject::operator=(ElementBufferObject&& other) noexcept
 	{
 		size = other.size;
 		buffer = other.buffer;
@@ -38,20 +51,7 @@ namespace jse {
 
 	}
 
-	ArrayBufferObject::ArrayBufferObject(ArrayBufferObject&& other) noexcept
-	{
-		size = other.size;
-		buffer = other.buffer;
-		alloced = other.alloced;
-		bufferUsage_ = other.bufferUsage_;
-
-		other.size = 0;
-		other.buffer = GL_INVALID_INDEX;
-		other.alloced = 0;
-		other.bufferUsage_ = BU_LAST_ENUM;
-	}
-
-	bool ArrayBufferObject::Create(size_t size, bufferUsage_t usage_, const void* data)
+	bool ElementBufferObject::Create(size_t size, bufferUsage_t usage_, const void* data)
 	{
 		if (size == 0)
 			return false;
@@ -60,7 +60,7 @@ namespace jse {
 
 		if (buffer != GL_INVALID_INDEX)
 		{
-			Warning("ArrayBuffer: buffer object already created !");
+			Warning("ElementBufferObject: buffer object already created !");
 			return false;
 		}
 
@@ -80,53 +80,53 @@ namespace jse {
 			alloced = size;
 		}
 
-		glBindBuffer(GL_ARRAY_BUFFER, buffer);
-		glBufferData(GL_ARRAY_BUFFER, size, data, usage);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, usage);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 
-	bool ArrayBufferObject::Alloc(size_t allocSize, const void* data)
+	bool ElementBufferObject::Alloc(size_t allocSize, const void* data)
 	{
 		if (allocSize + alloced > size)
 		{
-			Warning("ArrayBufferObject: allocation request exceeds buffer size !");
+			Warning("ElementBufferObject: allocation request exceeds buffer size !");
 			return false;
 		}
 
-		glBufferSubData(GL_ARRAY_BUFFER, alloced, allocSize, data);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, alloced, allocSize, data);
 		alloced += allocSize;
 
 		return true;
 	}
 
-	bool ArrayBufferObject::UpdateSubData(size_t offset, size_t size, const void* data)
+	bool ElementBufferObject::UpdateSubData(size_t offset, size_t size, const void* data)
 	{
 		if (offset + size > this->size || !data) {
 			return false;
 		}
 
-		glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
 	}
 
-	void ArrayBufferObject::Reset()
+	void ElementBufferObject::Reset()
 	{
 		alloced = 0;
 	}
 
-	void ArrayBufferObject::Realloc()
+	void ElementBufferObject::Realloc()
 	{
 		GLenum usage = bufferUsage2GL(bufferUsage_);
 
-		glBufferData(GL_ARRAY_BUFFER, size, nullptr, usage);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, nullptr, usage);
 	}
 
-	void ArrayBufferObject::Bind() const
+	void ElementBufferObject::Bind() const
 	{
 		if (buffer != GL_INVALID_INDEX) {
-			glBindBuffer(GL_ARRAY_BUFFER, (GLuint)buffer);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (GLuint)buffer);
 		}
 	}
-	size_t ArrayBufferObject::GetAlloced() const
+	size_t ElementBufferObject::GetAlloced() const
 	{
 		return alloced;
 	}

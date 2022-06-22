@@ -1,11 +1,11 @@
 #include "core/Types.hpp"
 #include "graphics/Image.hpp"
 
-namespace jse::graphics {
+#include <string>
 
-	using namespace core;
+namespace jse {
 
-	Image::Image(const core::String& name)
+	Image::Image(const std::string& name)
 	{
 		imageName = name;
 		internalFormat = FMT_RGBA;
@@ -18,7 +18,7 @@ namespace jse::graphics {
 		repeat = TW_REPEAT;
 	}
 
-	const String& Image::GetName() const
+	const std::string& Image::GetName() const
 	{
 		return imageName;
 	}

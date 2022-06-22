@@ -6,19 +6,18 @@
 #define BIT( n ) (1ULL << n)
 #define MASK( n ) (~(BIT( n )))
 
-namespace jse::graphics {
+namespace jse {
 
 
 	class Graphics3D
 	{
 	public:
-		virtual ~Graphics3D() {}
+		virtual ~Graphics3D() {};
 		virtual bool Init(const createWindow_t& cw) = 0;
 		virtual bool IsFullScreen() const = 0;
 		virtual bool IsInitalized() const = 0;
 	};
 
-	extern Graphics3D* GetGraphics();
 }
 
 #endif // !JSE_GRAPHICS_3D_H

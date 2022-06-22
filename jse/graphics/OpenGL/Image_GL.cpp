@@ -2,7 +2,7 @@
 #include "graphics/Image.hpp"
 #include <GL/glew.h>
 
-namespace jse::graphics {
+namespace jse {
 
 	void Image::PurgeTexture()
 	{

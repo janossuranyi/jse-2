@@ -2,9 +2,7 @@
 #include "scene/Mesh.hpp"
 
 #include <cassert>
-namespace jse::scene {
-
-	using namespace math;
+namespace jse {
 
 	Mesh::Mesh()
 	{
@@ -23,5 +21,24 @@ namespace jse::scene {
 		this->numPrimitives = numPos;
 		this->numIndices = numIndices;
 	}
+
+
+	MemoryBuffer<DrawVert> Mesh::CreateDrawVerts()
+	{
+		MemoryBuffer<DrawVert> buf(numPrimitives * sizeof(DrawVert));
+
+		for (unsigned i = 0; i < numPrimitives; ++i)
+		{
+			DrawVert v;
+			v.SetPosition( xyz[i] );
+			v.SetNormal( normals[i] );
+			v.SetTangent( tangents[i] );
+			v.SetTextCoord(	st[i] );
+			buf[i] = v;
+		}
+
+		return buf;
+	}
+
 
 }

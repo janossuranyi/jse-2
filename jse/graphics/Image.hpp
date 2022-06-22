@@ -2,8 +2,9 @@
 #define JSE_GRAPHICS_IMAGE_H
 
 #include "core/Types.hpp"
+#include <string>
 
-namespace jse::graphics {
+namespace jse {
 
 	enum dataFormat_t
 	{
@@ -57,14 +58,14 @@ namespace jse::graphics {
 	class Image
 	{
 	public:
-		Image(const core::String& name);
+		Image(const std::string& name);
 		void SetSamplerProps(textureFilter_t filter, textureWrapping_t wrap);
 		void AllocateTexture(textureType_t type, const char* data, int width, int height, int nchannel, internalFormat_t format);
-		const core::String& GetName() const;
+		const std::string& GetName() const;
 		void Bind() const;
 	private:
 		void PurgeTexture();
-		core::String imageName;
+		std::string imageName;
 
 		unsigned internalFormat;
 		unsigned dataFormat;

@@ -6,12 +6,22 @@
 #include "graphics/Light.hpp"
 
 #include <cassert>
+#include <string>
 
-namespace jse::scene {
+namespace jse {
 
-	using namespace graphics;
-	using namespace core;
-	using namespace core::io;
+	/*
+	* Makes a copy from the gltf buffer view
+	*/
+	template<class X>
+	MemoryBuffer<X> get_gltf_buffer(const tinygltf::Accessor& access, const tinygltf::Model& model)
+	{
+		const tinygltf::BufferView& view = model.bufferViews[access.bufferView];
+		const tinygltf::Buffer& buf = model.buffers[view.buffer];
+		const int byteStride = access.ByteStride(view);
+
+		return MemoryBuffer<X>(view.byteLength, buf.data.data() + view.byteOffset + access.byteOffset, byteStride);
+	}
 
 	static void parse_gltf_lights(tinygltf::Model& model, Scene& scene)
 	{
@@ -24,23 +34,25 @@ namespace jse::scene {
 			dst.name = src.name;
 			if (src.type == "point") {
 				dst.type = LT_POINT;
-				dst.range = static_cast<float>(src.range);
+				dst.attenuation.w = static_cast<float>(src.range);
 			}
 			else if (src.type == "spot") {
 				dst.type = LT_SPOT;
-				dst.range = static_cast<float>(src.range);
+				dst.attenuation.w = static_cast<float>(src.range);
 				dst.innerConeAngle = static_cast<float>(src.spot.innerConeAngle);
 				dst.outerConeAngle = static_cast<float>(src.spot.outerConeAngle);
 			}
 			else if (src.type == "directional") {
 				dst.type = LT_DIR;
 			}
-			
-			for (unsigned k = 0; k < 3; ++k)
-				dst.color[k] = static_cast<float>(src.color[k]);
 
-			dst.intensity = static_cast<float>(src.intensity);
-			dst.range = static_cast<float>(src.range);
+			dst.color = vec4(
+				static_cast<float>(src.color[0]),
+				static_cast<float>(src.color[1]),
+				static_cast<float>(src.color[2]),
+				static_cast<float>(src.intensity));
+
+			dst.attenuation.w = static_cast<float>(src.range);
 
 			scene.lights[i] = dst;
 		}
@@ -90,14 +102,10 @@ namespace jse::scene {
 					if (attr.first == "POSITION")
 					{
 						tinygltf::Accessor& access = model.accessors[attr.second];
-						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
-						assert(access.type == TINYGLTF_TYPE_VEC3);
-						tinygltf::BufferView& view = model.bufferViews[access.bufferView];
-						tinygltf::Buffer& buf = model.buffers[view.buffer];
-						int byteStride = access.ByteStride(view);
+						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT && access.type == TINYGLTF_TYPE_VEC3);
 
 						m.SetParameters((unsigned)access.count, (unsigned)idx.count, pType);
-												
+						m.GetPositions() = get_gltf_buffer<vec3>(access, model);
 						break;
 					}
 				}
@@ -107,48 +115,36 @@ namespace jse::scene {
 					if (attr.first == "NORMAL")
 					{
 						tinygltf::Accessor& access = model.accessors[attr.second];
-						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
-						assert(access.type == TINYGLTF_TYPE_VEC3);
-						tinygltf::BufferView& view = model.bufferViews[access.bufferView];
-						tinygltf::Buffer& buf = model.buffers[view.buffer];
-						int byteStride = access.ByteStride(view);
+						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT && access.type == TINYGLTF_TYPE_VEC3);
 
+						m.GetNormals() = get_gltf_buffer<vec3>(access, model);
 					}
 					else if (attr.first == "TANGENT")
 					{
 						tinygltf::Accessor& access = model.accessors[attr.second];
-						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
-						assert(access.type == TINYGLTF_TYPE_VEC4);
-						tinygltf::BufferView& view = model.bufferViews[access.bufferView];
-						tinygltf::Buffer& buf = model.buffers[view.buffer];
-						int byteStride = access.ByteStride(view);
+						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT && access.type == TINYGLTF_TYPE_VEC4);
 
+						m.GetTangents() = get_gltf_buffer<vec4>(access, model);
 					}
 					else if (attr.first == "TEXCOORD_0")
 					{
 						tinygltf::Accessor& access = model.accessors[attr.second];
-						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
-						assert(access.type == TINYGLTF_TYPE_VEC2);
-						tinygltf::BufferView& view = model.bufferViews[access.bufferView];
-						tinygltf::Buffer buf = model.buffers[view.buffer];
-						int byteStride = access.ByteStride(view);
+						assert(access.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT && access.type == TINYGLTF_TYPE_VEC2);
 
+						m.GetTexCoords() = get_gltf_buffer<vec2>(access, model);
 					}
 				}
 
-				tinygltf::BufferView& view = model.bufferViews[idx.bufferView];
-				tinygltf::Buffer& buf = model.buffers[view.buffer];
 				assert(idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT || idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT);
 				assert(idx.type == TINYGLTF_TYPE_SCALAR);
-				int byteStride = idx.ByteStride(view);
-				for (unsigned e = 0; e < idx.count; ++e)
+
+				if (idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT)
 				{
-					if (idx.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT)
-					{
-					}
-					else
-					{
-					}
+					m.GetIndex32() = get_gltf_buffer<unsigned int>(idx, model);
+				}
+				else
+				{
+					m.GetIndex16() = get_gltf_buffer<unsigned short>(idx, model);
 				}
 
 				m.SetMaterial(src.material);
@@ -174,11 +170,11 @@ namespace jse::scene {
 
 	}
 
-    bool Scene::LoadFromGltf(const core::String& filename)
+    bool Scene::LoadFromGltf(const std::string& filename)
     {
-		bool isText = filename.find(".glb") == core::String::npos;
-		core::String err;
-		core::String warn;
+		bool isText = filename.find(".glb") == std::string::npos;
+		std::string err;
+		std::string warn;
 		tinygltf::Model model;
 		tinygltf::TinyGLTF loader;
 
@@ -194,8 +190,8 @@ namespace jse::scene {
 
 		if (!result)
 		{
-			if (err != "") core::io::Error(err.c_str());
-			else core::io::Error(warn.c_str());
+			if (err != "") Error(err.c_str());
+			else Error(warn.c_str());
 
 			return false;
 		}

@@ -4,10 +4,8 @@
 #include <GL/glew.h>
 #include "graphics/BufferObject.hpp"
 
-namespace jse::graphics {
+namespace jse {
 
-	const GLuint INVALID_BUFFER_ID = 0xffffffff;
-	
 	inline GLenum bufferUsage2GL(bufferUsage_t _x)
 	{
 		GLenum usage;

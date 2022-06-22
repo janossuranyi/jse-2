@@ -3,9 +3,7 @@
 #include "input/InputTypes.hpp"
 #include "core/io/Logger.hpp"
 
-namespace jse::input {
-
-	using namespace jse::core;
+namespace jse {
 
 	InputServiceSDL::InputServiceSDL()
 	{
@@ -97,7 +95,7 @@ namespace jse::input {
 				{
 				case SDL_WINDOWEVENT_RESIZED:
 				case SDL_WINDOWEVENT_SIZE_CHANGED:
-					io::Info("Window %d resized to %dx%d",
+					Info("Window %d resized to %dx%d",
 						e.window.windowID, e.window.data1,
 						e.window.data2);
 

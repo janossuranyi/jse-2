@@ -1,8 +1,8 @@
 #include "Node.hpp"
 
-namespace jse::scene {
+namespace jse {
 
-	Node::Node(nodeType_t type, const core::String& name, int parent, int object)
+	Node::Node(nodeType_t type, const std::string& name, int parent, int object)
 	{
 		this->type = type;
 		this->name = name;

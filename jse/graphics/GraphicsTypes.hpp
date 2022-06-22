@@ -3,7 +3,7 @@
 
 #include "core/math/Vector.hpp"
 
-namespace jse::graphics {
+namespace jse {
 
 	enum class DriverCaps
 	{

@@ -7,7 +7,7 @@
 #include "SDL.h"
 #include "core/io/Logger.hpp"
 
-namespace jse::core::io {
+namespace jse {
 	static LogWriter gLogWriter("jse.log");
 
 	void LogWriter::Write(const std::string& msg)

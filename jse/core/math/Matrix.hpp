@@ -6,10 +6,10 @@
 
 #include "core/math/Vector.hpp"
 
-namespace jse::math {
+namespace jse {
 
-	using mat3 = glm::mat3;
 	using mat4 = glm::mat4;
+	using mat3 = glm::mat3;
 
 	inline void matrix_decompose(const mat4& mtx, vec3& scale, quat& rotatation, vec3& position)
 	{

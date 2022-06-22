@@ -4,7 +4,7 @@
 #include "core/Types.hpp"
 #include "core/math/Vector.hpp"
 
-namespace jse::graphics {
+namespace jse {
 
 	enum cameraType_t
 	{
@@ -17,9 +17,9 @@ namespace jse::graphics {
 	public:
 
 		Camera() :Camera("") {}
-		Camera(const core::String& name_) :name(name_) {}
+		Camera(const std::string& name_) :name(name_) {}
 
-		core::String name;
+		std::string name;
 		cameraType_t type{ CT_PERSPECTIVE };
 		float aspectRatio{ 0.0f };
 		float yfov{ 45.0 * 3.1415f/180.0f };
@@ -28,9 +28,9 @@ namespace jse::graphics {
 		float xmag{ 1.0f };
 		float ymag{ 1.0f };
 
-		math::vec3 eye{ 0.0f };
-		math::vec3 target{ 0.0f };
-		math::vec3 up{ 0.0f, 1.0f, 0.0f };
+		vec3 eye{ 0.0f };
+		vec3 target{ 0.0f };
+		vec3 up{ 0.0f, 1.0f, 0.0f };
 
 	};
 }

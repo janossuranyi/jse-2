@@ -8,7 +8,7 @@
 #include <SDL.h>
 #include <GL/glew.h>
 
-namespace jse::graphics {
+namespace jse {
 
 	struct GLConfig {
 		int majorVer;
@@ -35,8 +35,8 @@ namespace jse::graphics {
 		int version;
 		bool fullScreen;
 		bool initialized{ false };
-		core::String renderer;
-		core::String vendor;
+		std::string renderer;
+		std::string vendor;
 		GLConfig contextInfo;
 	};
 }

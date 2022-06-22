@@ -3,10 +3,14 @@
 #include <cmath>
 #include <thread>
 #include <chrono>
-#include "jse/core/Core.hpp"
+#include <string>
+#include "jse/core/math/Vector.hpp"
+#include "jse/core/math/Plane.hpp"
+#include "jse/core/io/Filesystem.hpp"
+#include "jse/core/io/Logger.hpp"
 #include "jse/input/InputService.hpp"
 #include "jse/graphics/GraphicsTypes.hpp"
-#include "jse/graphics/Graphics3D.hpp"
+#include "jse/graphics/OpenGL/Graphics3D_GL.hpp"
 #include "jse/graphics/DrawVert.hpp"
 #include "jse/scene/Mesh.hpp"
 #include "jse/scene/Scene.hpp"
@@ -62,39 +66,53 @@ bool myLoadImageDataFunction(tinygltf::Image* image, const int idx, std::string*
 
 int main(int argc, char** argv)
 {
-	using namespace jse::core;
-	using namespace jse::core::math;
-	using namespace jse::input;
-	using namespace jse::graphics;
-	using namespace jse::scene;
+	using namespace jse;
 
-	using namespace std::chrono;
+	Graphics3D_GL g3d;
+
+	using namespace jse;
 
 	createWindow_t cw;
 
-	Graphics3D* gd = jse::graphics::GetGraphics();
-
 	cw.debug = true;
-	gd->Init(cw);
+	
+	g3d.Init(cw);
 
 	InputService* input = GetInputService();
 
-	io::FileSystem fs;
+	FileSystem fs;
 	fs.SetWorkingDir(data_dir);
 
-	String err;
-	String warn;
+	std::string err;
+	std::string warn;
 	tinygltf::Model model;
 	tinygltf::TinyGLTF loader;
 	loader.SetImageLoader(myLoadImageDataFunction, nullptr);
 
-//	Scene scene("Scene1");
-//	scene.LoadFromGltf(fs.Resolve("assets/cube.gltf"));
+	Scene scene("Scene1");
+	scene.LoadFromGltf(fs.Resolve("assets/cube.gltf"));
+
+	plane_t plane(vec3(0, 1, 0), 2);
+
+	float d;
+	vec3 ip;
+	vec3 p1(3, 5, 0);
+	vec3 p2(5, 0, 0);
+
+	if (plane.LineIntersect(p1, p2, ip, d))
+	{
+		Info("p1(%.2f,%.2f,%.2f) - p2(%.2f,%.2f,%.2f)", p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
+		Info("d = %f, p = (%.2f,%.2f,%.2f)", d, ip.x, ip.y, ip.z);
+	}
 
 
 	while (!input->IsButtonDown(MouseButton::MB_Left))
 	{
+		using namespace std::chrono;
+
 		std::this_thread::sleep_for(100ms);
 		input->Update();
 	}
+
+	return 0;
 }

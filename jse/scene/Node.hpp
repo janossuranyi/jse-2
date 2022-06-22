@@ -2,10 +2,11 @@
 #define JSE_SCENE_NODE_H
 
 #include <vector>
+#include <string>
 #include "core/Types.hpp"
 #include "core/math/Matrix.hpp"
 
-namespace jse::scene {
+namespace jse {
 
 	enum class nodeType_t
 	{
@@ -20,17 +21,24 @@ namespace jse::scene {
 	{
 	public:
 
-		Node() : type(nodeType_t::NT_UNKNOWN), name(""), parent(-1), object(-1) {}
-		Node(nodeType_t type, const core::String& name, int parent, int object);
+		Node() : type(nodeType_t::NT_UNKNOWN), name(""), parent(-1), object(-1), transformUpdated(false) {}
+		Node(nodeType_t type, const std::string& name, int parent, int object);
+
 		nodeType_t type;
-		core::String name;		
+		std::string name;
 		int parent;
 		int object;
 
 		std::vector<int> children;
 		std::vector<float> weights;
-		math::mat4 modelTransform{ 1.0f };
-		math::mat4 worldTransform{ 1.0f };
+		mat4 modelTransform{ 1.0f };
+		mat4 worldTransform{ 1.0f };
+
+		vec3 position{ 0.0f };
+		vec3 scale{ 1.0f };
+		quat rotation{ 1.0f,0.0f,0.0f,0.0f };
+
+		bool transformUpdated;
 	};
 
 }

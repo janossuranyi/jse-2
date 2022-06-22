@@ -1,7 +1,7 @@
 #ifndef JSE_INPUT_TYPES_H
 #define JSE_INPUT_TYPES_H
 
-namespace jse::input {
+namespace jse {
 
 	enum InputDeviceType
 	{
