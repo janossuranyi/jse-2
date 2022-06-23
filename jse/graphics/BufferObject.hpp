@@ -1,6 +1,8 @@
 #ifndef JSE_GRAPHICS_BUFFER_OBJECT_H
 #define JSE_GRAPHICS_BUFFER_OBJECT_H
 
+#include <cstdio>
+
 namespace jse {
 
 	enum bufferUsage_t
