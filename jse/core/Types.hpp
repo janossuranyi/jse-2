@@ -7,6 +7,8 @@
 
 namespace jse {
 
+	const float EPSILON = 1e-6f;
+
 	//using String = std::string;
 	using ByteVec = std::vector<uint8_t>;
 	using IntVec = std::vector<int>;

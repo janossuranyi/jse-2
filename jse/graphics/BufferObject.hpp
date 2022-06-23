@@ -27,7 +27,7 @@ namespace jse {
 		void Reset();
 		void Realloc();
 		void Bind() const;
-		size_t GetAlloced() const;
+		size_t GetAllocated() const;
 	private:
 		size_t alloced;
 		size_t size;
@@ -54,7 +54,7 @@ namespace jse {
 		void Reset();
 		void Realloc();
 		void Bind() const;
-		size_t GetAlloced() const;
+		size_t GetAllocated() const;
 	private:
 		size_t alloced;
 		size_t size;
@@ -82,7 +82,7 @@ namespace jse {
 		void BindToShader(unsigned progId, unsigned bindigPoint);
 		void BindToIndex(const unsigned blockIndex);
 		void BindToIndexRange(const unsigned blockIndex, const unsigned offset, const size_t size);
-		size_t GetAlloced() const;
+		size_t GetAllocated() const;
 	private:
 		size_t alloced;
 		size_t size;

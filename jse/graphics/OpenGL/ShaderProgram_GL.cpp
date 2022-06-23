@@ -60,7 +60,7 @@ namespace jse {
 			srcPtrs.push_back(elem.c_str());
 		}
 
-		glShaderSource(vs, srcPtrs.size(), srcPtrs.data(), nullptr);
+		glShaderSource(vs, (GLsizei)srcPtrs.size(), srcPtrs.data(), nullptr);
 
 		glCompileShader(vs);
 		glGetShaderiv(vs, GL_COMPILE_STATUS, &result);
@@ -88,7 +88,7 @@ namespace jse {
 			srcPtrs.push_back(elem.c_str());
 		}
 
-		glShaderSource(fs, srcPtrs.size(), srcPtrs.data(), nullptr);
+		glShaderSource(fs, (GLsizei)srcPtrs.size(), srcPtrs.data(), nullptr);
 
 		glCompileShader(fs);
 		glGetShaderiv(fs, GL_COMPILE_STATUS, &result);

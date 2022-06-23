@@ -27,13 +27,15 @@ namespace jse {
 	{
 		MemoryBuffer<DrawVert> buf(numPrimitives * sizeof(DrawVert));
 
-		for (unsigned i = 0; i < numPrimitives; ++i)
+		for (int i = 0; i < numPrimitives; ++i)
 		{
 			DrawVert v;
 			v.SetPosition( xyz[i] );
 			v.SetNormal( normals[i] );
 			v.SetTangent( tangents[i] );
 			v.SetTextCoord(	st[i] );
+			v.SetColor(vec4(0.0f));
+			v.SetColor2(vec4(0.0f));
 			buf[i] = v;
 		}
 

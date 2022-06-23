@@ -83,6 +83,8 @@ namespace jse {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, data, usage);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		return true;
 	}
 
 	bool ElementBufferObject::Alloc(size_t allocSize, const void* data)
@@ -106,6 +108,8 @@ namespace jse {
 		}
 
 		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offset, size, data);
+
+		return true;
 	}
 
 	void ElementBufferObject::Reset()
@@ -126,7 +130,7 @@ namespace jse {
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (GLuint)buffer);
 		}
 	}
-	size_t ElementBufferObject::GetAlloced() const
+	size_t ElementBufferObject::GetAllocated() const
 	{
 		return alloced;
 	}
