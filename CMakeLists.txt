@@ -45,6 +45,10 @@ file(GLOB INPUT_INCLUDE jse/input/*.hpp)
 file(GLOB INPUT_SDL_SOURCE  jse/input/SDL/*.cpp)
 file(GLOB INPUT_SDL_INCLUDE jse/input/SDL/*.hpp)
 
+#Renderer
+file(GLOB RENDERER_SOURCE  jse/graphics/renderer/*.cpp)
+file(GLOB RENDERER_INCLUDE jse/graphics/renderer/*.hpp)
+
 
 file(GLOB SOIL2_INCLUDE external/soil2/incs/*.h)
 file(GLOB SOIL2_SOURCE external/soil2/srcs/*.c)
@@ -68,6 +72,8 @@ add_library(engine STATIC
   ${MATH_INCLUDE}
   ${SCENE_SOURCE}
   ${SCENE_INCLUDE}
+  ${RENDERER_SOURCE}
+  ${RENDERER_INCLUDE}
 )
 
 add_library(SOIL2 STATIC
@@ -154,4 +160,4 @@ source_group("Scene" FILES ${SCENE_SOURCE} ${SCENE_INCLUDE})
 source_group("Input" FILES ${INPUT_SOURCE} ${INPUT_INCLUDE})
 source_group("Input\\SDL" FILES ${INPUT_SDL_SOURCE} ${INPUT_SDL_INCLUDE})
 source_group("Shaders" FILES ${SHADERS} ${SHADERS_INC})
-
+source_group("Renderer" FILES ${RENDERER_SOURCE} ${RENDERER_INCLUDE})
