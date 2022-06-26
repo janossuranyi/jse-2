@@ -70,12 +70,13 @@ int main(int argc, char** argv)
 
 	Graphics3D_GL g3d;
 
-	using namespace jse;
-
 	createWindow_t cw;
 
 	cw.debug = true;
-	
+	cw.req_sRGB = true;
+	cw.width = 1280;
+	cw.height = 720;
+
 	g3d.Init(cw);
 
 	InputService* input = GetInputService();

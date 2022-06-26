@@ -87,6 +87,8 @@ namespace jse {
 		glBindBuffer(GL_UNIFORM_BUFFER, buffer);
 		glBufferData(GL_UNIFORM_BUFFER, size, data, usage);
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+		return true;
 	}
 
 	bool UniformBufferObject::Alloc(size_t allocSize, const void* data)
@@ -110,6 +112,8 @@ namespace jse {
 		}
 
 		glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
+
+		return true;
 	}
 
 	void UniformBufferObject::Reset()
@@ -147,7 +151,7 @@ namespace jse {
 		}
 	}
 
-	size_t UniformBufferObject::GetAlloced() const
+	size_t UniformBufferObject::GetAllocated() const
 	{
 		return alloced;
 	}
